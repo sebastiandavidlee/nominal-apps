@@ -9,7 +9,7 @@ Hardware: SO-101 Robot with Feetech servo motors
 Protocol: Feetech SCS (Serial Command System)
 """
 
-# doesnt work yet...
+# doesnt work yet..
 
 import serial
 import time
