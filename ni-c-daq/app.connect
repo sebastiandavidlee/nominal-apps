@@ -1,0 +1,209 @@
+title: NI cDAQ
+
+python:
+  packages:
+    - "nidaqmx>=1.0.2"
+
+streaming:
+  buffer_size: 10_000
+  persistence:
+    - enabled:
+        value_id: stream_to_nominal
+      file_path: './cdaq_9174.avro'
+      data_source_rid: ri.catalog.cerulean-staging.dataset.a8abd97d-d666-4aa3-b293-b583d29c90c6
+      streams:
+        - id: "sensors"
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - id: ni_cdaq_9174
+          label: NI cDAQ 9174
+          path: ni_cdaq_9174.py
+
+left_panel:
+  width: 0.5
+  tabs:
+    - name: Live Data
+      layout:
+        - title: Sensor Array
+          show_picker: true
+          show_cursor_values: true
+          plot: line
+          stream_id: sensors
+          x_label: Time
+          x_format: timestamp
+        - display: stream_value
+          color: rgb(200,255,100)
+          units: C
+          stream_id: sensors
+          channel: cDAQ1Mod1/ai0
+          show_channel_picker: true
+    - name: Script Editor
+      layout:
+        - id: script_editor
+          edit_file: "ni_cdaq_9174.py"
+          show_picker: true
+    - name: Logs
+      layout:
+        - display: logs
+          script_id: ni_cdaq_9174
+
+right_panel:
+  width: 0.5
+  tabs:
+    - name: Controls
+      layout:
+        # cDAQ module list
+        - display: header
+          label: cDAQ settings
+
+          # Module 1
+        - direction: horizontal
+          group_layout:
+            - id: cdaq_model_1
+              label: Module 1
+              input: nidaqmx
+              width: 100
+              default: "cDAQ1Mod1"
+            - id: analog_input_start_1
+              label: AI start
+              input: dropdown
+              options: 0:15
+              default: "0"
+              width: 30
+            - id: analog_input_end_1
+              label: AI end
+              input: dropdown
+              options: 0:15
+              default: "2"
+              width: 30
+            - id: card_type_1
+              label: Type
+              input: dropdown
+              options: ["TC", "mV", "mA"]
+              default: TC
+              width: 30
+          # Module 2
+        - direction: horizontal
+          group_layout:
+            - id: cdaq_model_2
+              label: Module 2
+              input: nidaqmx
+              width: 100
+            - id: analog_input_start_2
+              label: AI start
+              input: dropdown
+              options: 0:15
+              default: "0"
+              width: 30
+            - id: analog_input_end_2
+              label: AI end
+              input: dropdown
+              options: 0:15
+              default: "2"
+              width: 30
+            - id: card_type_2
+              label: Type
+              input: dropdown
+              options: ["TC", "mV", "mA"]
+              default: mV
+              width: 30
+          # Module 3
+        - direction: horizontal
+          group_layout:
+            - id: cdaq_model_3
+              label: Module 3
+              input: nidaqmx
+              width: 100
+            - id: analog_input_start_3
+              label: AI start
+              input: dropdown
+              options: 0:15
+              default: "0"
+              width: 30
+            - id: analog_input_end_3
+              label: AI end
+              input: dropdown
+              options: 0:15
+              default: 2
+              width: 30
+            - id: card_type_3
+              label: Type
+              input: dropdown
+              options: ["TC", "mV", "mA"]
+              default: mA
+              width: 30
+          # Module 4
+        - direction: horizontal
+          group_layout:
+            - id: cdaq_model_4
+              label: Module 4
+              input: nidaqmx
+              width: 100
+            - id: analog_input_start_4
+              label: AI start
+              input: dropdown
+              options: 0:15
+              default: "0"
+              width: 30
+            - id: analog_input_end_4
+              label: AI end
+              input: dropdown
+              options: 0:15
+              default: "2"
+              width: 30
+            - id: card_type_4
+              label: Type
+              input: dropdown
+              options: ["TC", "mV", "mA"]
+              default: TC
+              width: 30
+        - collapsible: true
+          default_open: true
+          label: Channel Configuration
+          group_layout:
+            - id: channel_config_path
+              edit_file: "channels.yml"
+              show_picker: false
+              height: 250.0
+          # cDAQ configuration
+        - label: Voltage settings
+          collapsible: true
+          direction: horizontal
+          group_layout:
+            - id: min_voltage
+              label: Min. voltage
+              input: number
+              default: -0.005
+              width: 100
+            - id: max_voltage
+              label: Max. voltage
+              input: number
+              default: 0.005
+              width: 100
+        - label: Sampling settings
+          direction: horizontal
+          collapsible: true
+          group_layout:
+            - id: interval_seconds
+              label: Sampling (seconds)
+              input: number
+              default: 0.1
+              width: 50
+            - id: thermocouple_type
+              input: dropdown
+              options: ["K", "J", "T", "E", "N", "R", "S", "B", "C"]
+              default: "K"
+              width: 30
+        - display: separator
+        # Nominal connection stuff
+        - label: Nominal Settings
+          display: header
+        - id: mock_data
+          label: Simulation mode
+          input: checkbox
+        - id: stream_to_nominal
+          label: Stream to Nominal?
+          input: checkbox

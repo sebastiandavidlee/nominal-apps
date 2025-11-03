@@ -1,0 +1,98 @@
+title: Drone replay
+
+python:
+  packages:
+    - numpy
+    - scipy
+    - mcap
+    - mcap-ros1-support
+streaming:
+  buffer_size: 10000
+
+timeline:
+  show: true
+
+scene:
+  models:
+    - path: $default/quadcopter.glb
+      scale: 0.5
+      infer_heading: false
+      stream:
+        id: drone_position
+        color: speed
+        channel_mapping:
+          position:
+            type: cartesian
+            x: x
+            y: z
+            z: y
+          orientation:
+            pitch: pitch
+            heading: heading
+            roll: roll
+
+left_panel:
+  width: 0.2
+  layout:
+    - display: header
+      label: Left Camera
+    - display: video
+      frames: camera_left
+      height: 400
+    - display: header
+      label: Right Camera
+    - display: video
+      frames: camera_right
+      height: 400
+
+right_panel:
+  width: 0.25
+  layout:
+    - title: Orientation
+      plot: line
+      stream_id: drone_position
+      show_legend: true
+      channels:
+        - pitch
+        - roll
+        - heading
+      x_label: Time (s)
+      y_label: Degrees
+    - title: Position
+      plot: line
+      stream_id: drone_position
+      show_legend: true
+      channels:
+        - x
+        - y
+        - z
+      x_label: Time (s)
+      y_label: Meters
+    - title: Velocity
+      plot: line
+      stream_id: drone_velocity
+      show_legend: true
+      channels:
+        - x
+        - y
+        - z
+        - magnitude
+      x_label: Time (s)
+      y_label: Meters/s
+    - title: Acceleration
+      plot: line
+      stream_id: drone_acceleration
+      show_legend: true
+      channels:
+        - x
+        - y
+        - z
+        - magnitude
+      x_label: Time (s)
+      y_label: Meters/s^2
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - path: drone_replay.py

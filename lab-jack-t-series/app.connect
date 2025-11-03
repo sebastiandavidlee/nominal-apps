@@ -1,0 +1,181 @@
+title: LabJack T Series
+
+python:
+  packages:
+    - "labjack-ljm"
+
+streaming:
+  buffer_size: 10_000
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - id: labjack
+          label: LabJack
+          path: labjack_tseries.py
+
+left_panel:
+  width: 0.5
+  tabs:
+    - name: Live Data
+      layout:
+        - title: Channel Plot
+          show_picker: true
+          show_cursor_values: true
+          plot: line
+          stream_id: channel_data
+          x_label: epoch (s)
+        - display: stream_value
+          units: V
+          stream_id: channel_data
+          channel: AIN0
+          show_channel_picker: true
+    - name: Script Editor
+      layout:
+        - id: script_editor
+          edit_file: "labjack_tseries.py"
+          show_picker: true
+    - name: Logs
+      layout:
+        - display: logs
+          script_id: labjack_tseries
+
+right_panel:
+  width: 0.5
+  tabs:
+    - name: Setup
+      layout:
+        - display: header
+          label: LabJack Settings
+        - direction: horizontal
+          group_layout:
+            # Stream 1
+            - id: serial
+              label: Device Serial Number
+              input: text
+              width: 200
+            - id: model
+              label: Device model
+              input: dropdown
+              width: 100
+              options: ["T4", "T7", "T8"]
+              default: "T4"
+        - direction: horizontal
+          group_layout:
+            - id: input_1
+              label: Input 1
+              input: dropdown
+              width: 100
+              options:
+                - "AIN0"
+                - "AIN1"
+                - "AIN2"
+                - "AIN3"
+              default: "AIN0"
+        # Stream 2
+        - direction: horizontal
+          group_layout:
+            - id: input_2
+              label: Input 2
+              input: dropdown
+              width: 100
+              options:
+                - "AIN0"
+                - "AIN1"
+                - "AIN2"
+                - "AIN3"
+              default: "AIN1"
+        # Stream 3
+        - direction: horizontal
+          group_layout:
+            - id: input_3
+              label: Input 3
+              input: dropdown
+              width: 100
+              options:
+                - "AIN0"
+                - "AIN1"
+                - "AIN2"
+                - "AIN3"
+              default: "AIN2"
+        # Stream 4
+        - direction: horizontal
+          group_layout:
+            - id: input_4
+              label: Input 4
+              input: dropdown
+              width: 100
+              options:
+                - "AIN0"
+                - "AIN1"
+                - "AIN2"
+                - "AIN3"
+              default: "AIN3"
+        - label: Settings
+          direction: horizontal
+          group_layout:
+            - id: sample_rate
+              label: Sample Rate (Hz)
+              input: number
+              default: 10
+              width: 50
+        - display: separator
+        - display: header
+          label: Nomimal Core Configuration
+        - id: connection_rid
+          label: Connection DataSource
+          input: connection_selector
+        # - id: asset_rid
+        #   label: Asset
+        #   input: asset_selector
+        - id: tag_key
+          input: text
+          default: "DAQ"
+        - id: tag_value
+          input: text
+          default: "LabJack"
+    - name: "Acquire"
+      layout:
+        - display: header
+          label: Acquisition Controls
+        - display: separator
+        - id: run_state
+          label: State
+          input: dropdown
+          width: 100
+          options: ["Running", "Stopped"]
+          default: "Stopped"
+        - display: separator
+        - display: header
+          label: Stream to Nominal
+        - direction: horizontal
+          group_layout:
+            - id: stream_to_nominal
+              label: Stream to Nominal?
+              input: checkbox
+            - display: banner
+              value_id: connection_status
+    - name: "Stats for nerds"
+      layout:
+        - display: header
+          label: LabJack Stats
+        - display: separator
+        - direction: horizontal
+          group_layout:
+            - display: header
+              label: "Actual Sample Rate: "
+            - display: banner
+              value_id: actual_sample_rate
+        - direction: horizontal
+          group_layout:
+            - display: header
+              label: "On-Device Buffer: "
+            - display: banner
+              value_id: device_buffer
+        - direction: horizontal
+          group_layout:
+            - display: header
+              label: "Driver Buffer: "
+            - display: banner
+              value_id: driver_buffer

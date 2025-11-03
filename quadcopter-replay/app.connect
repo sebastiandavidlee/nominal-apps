@@ -1,0 +1,33 @@
+title: Quadcopter Replay
+
+python:
+  packages:
+    - polars
+
+timeline:
+  show: true
+
+scene:
+  models:
+    - path: $default/quadcopter.glb
+      infer_heading: false
+      stream:
+        id: drone_position
+        channel_mapping:
+          position:
+            type: cartesian
+            x: x
+            y: y
+            z: z
+          orientation:
+            pitch: pitch
+            heading: heading
+            roll: roll
+
+bottom_panel:
+  height: 0.2
+  layout:
+    - controls: script_table
+      scripts:
+        - path: flight_replay.py
+        - path: fail_status.py

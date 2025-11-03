@@ -1,0 +1,84 @@
+title: SO-101 Live test
+
+python:
+  packages:
+    - pyserial
+    - opencv-python-headless
+    - numpy
+    - connect-python
+
+streaming:
+  buffer_size: 10_000
+
+left_panel:
+  width: 0.5
+  layout:
+    - display: header
+      label: Camera 1
+    - display: video
+      frames: camera_1
+      height: 240
+    - display: header
+      label: Camera 2
+    - display: video
+      frames: camera_2
+      height: 240
+
+right_panel:
+  width: 0.5
+  layout:
+    - title: Arm 1 Motor Positions (ACM1)
+      plot: line
+      stream_ids: ["so101_motors"]
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      show_picker: true
+      y_label: Position (Raw)
+      y_range: [0, 4096]
+      height: 300
+    - title: Arm 2 Motor Positions (ACM0)
+      plot: line
+      stream_ids: ["so101_arm2_motors"]
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      show_picker: true
+      y_label: Position (Raw)
+      y_range: [0, 4096]
+      height: 250
+    - display: header
+      label: "Arm 2 Current Motor Values"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_1
+      label: "Motor 1"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_2
+      label: "Motor 2"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_3
+      label: "Motor 3"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_4
+      label: "Motor 4"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_5
+      label: "Motor 5"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_6
+      label: "Motor 6"
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - label: Arm 1 Motors (ACM1)
+          path: so101_live-motor.py
+        - label: Arm 2 Motors (ACM0)
+          path: so101_arm2.py
+        - label: Camera Feeds
+          path: so101_cameras.py
+        - label: "⚠️ Trajectory Test (ACM0)"
+          path: so101_trajectory_test.py

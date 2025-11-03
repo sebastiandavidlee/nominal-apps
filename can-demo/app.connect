@@ -1,0 +1,207 @@
+title: CAN Demo
+
+python:
+  packages:
+    - numpy
+    - python-can
+    - cantools
+
+bottom_panel:
+  column_sizes: [4, 1]
+  columns:
+    - layout:
+        - controls: script_table
+          scripts:
+            - path: stream_CAN_data.py
+              label: DBC Decode
+
+    - layout:
+        - display: separator
+        - id: simulated_data
+          label: Simulated Data
+          input: checkbox
+        - display: separator
+
+left_panel:
+  width: 0.5
+  layout:
+    - title: Temperature vs Time
+      plot: line
+      stream_ids: ["CJTemp", "TLTemp", "TRTemp", "BLTemp", "BRTemp"]
+      colors: ["red", "orange", "yellow", "green", "blue"]
+      show_picker: true
+      x_label: Time
+      x_format: timestamp
+      y_label: "Temperature (C)"
+
+right_panel:
+  width: 0.5
+  column_sizes: [1, 1]
+  columns:
+    - layout:
+        - display: gauge
+          radius: 96.0
+          zone_width: 20.0
+          stream_id: TLTemp
+          title: TL Temp
+          units: °C
+          min: 0.0
+          max: 40.0
+          zones:
+            - start: 0.0
+              end: 25.0
+              color: safe
+            - start: 25.1
+              end: 35.0
+              color: warn
+            - start: 35.1
+              end: 40.0
+              color: critical
+          chevron_size: 15.0
+          hysteresis: 0.25
+          refresh: 0.25
+
+        - display: separator
+
+        - display: gauge
+          radius: 96.0
+          zone_width: 20.0
+          stream_id: BLTemp
+          title: BL Temp
+          units: °C
+          min: 0.0
+          max: 40.0
+          zones:
+            - start: 0.0
+              end: 25.0
+              color: safe
+            - start: 25.1
+              end: 35.0
+              color: warn
+            - start: 35.1
+              end: 40.0
+              color: critical
+          chevron_size: 15.0
+          hysteresis: 0.25
+          refresh: 0.25
+
+        - display: separator
+
+        - display: gauge
+          radius: 96.0
+          zone_width: 20.0
+          stream_id: CJTemp
+          title: CJ Temp
+          units: °C
+          min: 0.0
+          max: 40.0
+          zones:
+            - start: 0.0
+              end: 25.0
+              color: safe
+            - start: 25.1
+              end: 35.0
+              color: warn
+            - start: 35.1
+              end: 40.0
+              color: critical
+          chevron_size: 15.0
+          hysteresis: 0.25
+          refresh: 0.25
+
+    - layout:
+        - display: gauge
+          radius: 96.0
+          zone_width: 20.0
+          stream_id: TRTemp
+          title: TR Temp
+          units: °C
+          min: 0.0
+          max: 40.0
+          zones:
+            - start: 0.0
+              end: 25.0
+              color: safe
+            - start: 25.1
+              end: 35.0
+              color: warn
+            - start: 35.1
+              end: 40.0
+              color: critical
+          chevron_size: 15.0
+          hysteresis: 0.25
+          refresh: 0.25
+
+        - display: separator
+
+        - display: gauge
+          radius: 96.0
+          zone_width: 20.0
+          stream_id: BRTemp
+          title: BR Temp
+          units: °C
+          min: 0.0
+          max: 40.0
+          zones:
+            - start: 0.0
+              end: 25.0
+              color: safe
+            - start: 25.1
+              end: 35.0
+              color: warn
+            - start: 35.1
+              end: 40.0
+              color: critical
+          chevron_size: 15.0
+          hysteresis: 0.25
+          refresh: 0.25
+
+        - display: separator
+
+        - column_sizes: [1, 1]
+          columns:
+            - layout:
+                - dashboard: alarms
+                  id: tl_status_alarms
+                  stream_id: alarms
+                  cols: 1
+                  align: center
+                  signals:
+                    - label: TL Error Warn
+                      channel: TLStatus
+                      color: critical
+
+                - display: separator
+
+                - dashboard: alarms
+                  id: bl_status_alarms
+                  stream_id: alarms
+                  cols: 1
+                  align: center
+                  signals:
+                    - label: BL Error Warn
+                      channel: BLStatus
+                      color: critical
+
+            - layout:
+                - dashboard: alarms
+                  id: tr_status_alarms
+                  stream_id: alarms
+                  cols: 1
+                  align: center
+                  signals:
+                    - label: TR Error Warn
+                      channel: TRStatus
+                      color: critical
+
+                - display: separator
+
+                - dashboard: alarms
+                  id: br_status_alarms
+                  stream_id: alarms
+                  cols: 1
+                  align: center
+                  signals:
+                    - label: BR Error Warn
+                      channel: BRStatus
+                      color: critical

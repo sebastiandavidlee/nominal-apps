@@ -1,0 +1,89 @@
+title: Multi-channel
+
+python:
+  packages:
+    - numpy
+
+streaming:
+  buffer_size: 5000
+  persistence:
+    - data_source_rid:
+        value_id: dataset_rid
+      enabled:
+        value_id: stream_to_nominal
+      tags: {source: "connect"}
+      streams:
+        - id: sensors
+
+bottom_panel:
+  height: 0.2
+  layout:
+    - controls: script_table
+      scripts:
+        - label: Multi sine waves
+          path: multi_stream_example.py
+        - label: Single sine save
+          path: single_stream_example.py
+
+left_panel:
+  width: 0.5
+  tabs:
+    - name: Live Data
+      layout:
+        - title: Sensor Array
+          plot: line
+          stream_ids: ["sensors", "sine_wave"]
+          show_picker: true
+          show_cursor_values: true
+          x_label: "Time"
+          y_label: "Voltage (mV)"
+          x_format: timestamp
+
+right_panel:
+  width: 0.5
+  tabs:
+    - name: Controls
+      layout:
+        - plot: line
+          stream_id: sine_wave
+          hide_grid: true
+          height: 60.0
+          channels: ["value"]
+        - id: dataset_rid
+          input: text
+          label: Dataset RID
+        - id: stream_count
+          input: number
+          default: 50
+        - id: delay
+          input: number
+          default: 0.015
+        - id: frequency
+          input: slider
+          min: 0.0
+          max: 10.0
+          default: 0.3
+        - id: y_axis_offset
+          input: slider
+          min: -5.0
+          max: 5.0
+          default: 0.0
+        - id: stream_to_nominal
+          input: checkbox
+          label: Stream to Nominal
+        - id: debug_logging
+          input: checkbox
+          label: Debug Logging
+    - name: Multi Axis Plot
+      layout:
+        - title: Multi Axis Plot
+          plot: line
+          stream_ids: ["sine_wave", "incrementing_value"]
+          show_picker: true
+          show_cursor_values: true
+          x_label: "Time (s)"
+          x_format: timestamp
+          y_label: "Voltage (mV)"
+          secondary_axis:
+            channels: ["incrementing_value.value"]
+            label: "Temperature (C)"

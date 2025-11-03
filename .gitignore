@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+build/
+dist/
+
+# Junk / heavy
+*.zip
+*.tar.gz
+*.mp4
+*.mov
+*.avi
+data/
+datasets/
+models/
+checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

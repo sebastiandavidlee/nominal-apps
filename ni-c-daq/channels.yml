@@ -1,0 +1,6 @@
+cDAQ3Mod1/ai0:
+  min_val: -0.005
+  max_val: 0.005
+  units: DEG_C
+  thermocouple_type: K
+  card_type: mV
