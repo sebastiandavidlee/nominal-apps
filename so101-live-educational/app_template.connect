@@ -1,0 +1,70 @@
+title: SO-101 Live
+
+scene:
+  models:
+    - ...
+
+python:
+  packages:
+    - pyserial
+    - ...
+
+streaming:
+  buffer_size: 10_000
+
+left_panel:
+  width: 0.5
+  layout:
+    - display: header
+      label: Camera 1
+    - display: video
+      frames: camera_1
+      height: 240
+
+right_panel:
+  width: 0.5
+  layout:
+    - title: Arm 1 Motor Positions (ACM1)
+      plot: line
+      stream_ids: ["so101_motors"]
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      show_picker: true
+      y_label: Position (Raw)
+      y_range: [0, 4096]
+      height: 300
+    - title: Arm 2 Motor Positions (ACM0)
+      plot: line
+      stream_ids: ["so101_arm2_motors"]
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      show_picker: true
+      y_label: Position (Raw)
+      y_range: [0, 4096]
+      height: 250
+
+    - display: header
+      label: "Arm 1 Current Motor Values (ACM1)"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_1
+      label: "Motor 1"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_2
+      label: "Motor 2"
+    - display: ...
+
+    - display: header
+      label: "Arm ... Current Motor Values (ACM0)"
+    - display: stream_value
+      stream_id: so101_arm2_motors
+      channel: motor_1
+      label: "Motor 1"
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - label: title 1
+          path: file1.py
+        - label: title 2
+          path: file2.py

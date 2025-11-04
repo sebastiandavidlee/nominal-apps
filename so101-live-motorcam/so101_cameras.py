@@ -92,7 +92,7 @@ def main(connect_client: connect_python.Client):
             timestamp = time.time()
             
             # Capture from camera 1
-            if cap1 is not None:
+            if cap1 is not None:    # 
                 ret1, frame1 = cap1.read()
                 if ret1:
                     # Convert BGR to RGB (OpenCV uses BGR, most viewers expect RGB)
