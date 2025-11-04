@@ -1,0 +1,42 @@
+title: Robot Arm (URDF)
+
+streaming:
+  buffer_size: 20_000
+  playback_speed: 0.1
+
+timeline:
+  show: true
+
+scene:
+  camera:
+    initial_zoom: 1
+  models:
+    - path: urdf/ur5e/ur5e.urdf
+      initial_position:
+        type: cartesian
+        y: -1
+      stream:
+        id: pose
+        channel_mapping:
+          urdf_links: "*" # maps each channel in the stream to a URDF link of the same name
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - label: Arm Replay
+          path: synth_replay.py
+
+right_panel:
+  width: 0.3
+  tabs:
+    - name: Sensor Data
+      layout:
+        - title: Joint Angles
+          plot: line
+          stream_id: pose
+          x_label: Time (s)
+          y_label: Angle (radians)
+          y_bounds:
+            min: -7.5
+            max: 7.5
