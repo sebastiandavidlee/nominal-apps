@@ -1,15 +1,12 @@
 """
-SO-101 Robot Arm Motor Control - Trajectory Testing
+SO-101 Robot Arm Motor Control - New Control Script
 
-This script sends position commands to the SO-101 robot motors to execute
-a controlled trajectory. It moves each motor through a range of positions
-at a safe speed to test motor control capabilities.
+This is a copy of the working trajectory test script.
+Ready for new functionality to be added.
 
 Hardware: SO-101 Robot with Feetech servo motors
 Protocol: Feetech SCS (Serial Command System)
 """
-
-# doesnt work yet..
 
 import serial
 import time
@@ -25,8 +22,8 @@ TIMEOUT = 0.05                  # Serial read timeout in seconds
 # Reference positions (measured from Arm 2 at rest)
 HOME_POSITIONS = {
     1: 1950,
-    2: 1850,
-    3: 2007,
+    2: 1626,
+    3: 1807,
     4: 2495,
     5: 2060,
     6: 2300
@@ -34,9 +31,9 @@ HOME_POSITIONS = {
 
 # Trajectory parameters
 POSITION_RANGE = 100          # +/- range from home position
-STEP_SIZE = 5                 # Position change per update (encoder steps) - SLOWER!
-UPDATE_RATE = 2.0             # Updates per second (Hz) - increase for smoother motion
-TEST_MOTOR_ONLY = [2,3,4,5,6]         # Only move these motors [1, 2, ...], single motor like 1, or None to move all
+STEP_SIZE = 10                 # Position change per update (encoder steps)
+UPDATE_RATE = 2.0             # Updates per second (Hz)
+TEST_MOTOR_ONLY = [1,2,3]     # Only move these motors [1, 2, ...], single motor like 1, or None to move all
 
 # Feetech Protocol Constants
 SCS_WRITE = 0x03               # Write command instruction
@@ -315,10 +312,7 @@ def enable_motor_torque(ser, motor_id):
 @connect_python.main
 def main(connect_client: connect_python.Client):
     """
-    Main trajectory execution loop.
-    
-    Moves each motor through a controlled trajectory from home position
-    -100 to +100 steps and back, at a safe speed.
+    Main control loop - ready for new functionality.
     """
     ser = None
     
@@ -328,130 +322,14 @@ def main(connect_client: connect_python.Client):
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=TIMEOUT)
         logger.info("Connection established successfully.")
         
-        # Clear stream for trajectory data
-        connect_client.clear_stream("motor_trajectory")
-        
-        # Verify we can read all motors and show their limits
-        logger.info("Reading current motor positions and limits...")
-        current_positions = {}
-        for motor_id in MOTOR_IDS:
-            pos = get_motor_position(ser, motor_id)
-            min_limit, max_limit = get_motor_limits(ser, motor_id)
-            
-            if pos is not None:
-                current_positions[motor_id] = pos
-                logger.info(f"Motor {motor_id}:")
-                logger.info(f"  Current: {pos}, Home: {HOME_POSITIONS[motor_id]}")
-                if min_limit is not None and max_limit is not None:
-                    logger.info(f"  Limits: [{min_limit}, {max_limit}] (range: {max_limit - min_limit})")
-                    logger.info(f"  Trajectory will move: {HOME_POSITIONS[motor_id] - POSITION_RANGE} → {HOME_POSITIONS[motor_id] + POSITION_RANGE}")
-            else:
-                logger.error(f"Motor {motor_id}: Failed to read position!")
-                return
-        
-        # Configure motors for position control
-        logger.info("\n⚠️  Configuring motors for position control...")
-        for motor_id in MOTOR_IDS:
-            set_motor_mode(ser, motor_id, mode=0)  # Position mode
-            set_motor_speed(ser, motor_id, speed=200)  # Moderate speed
-            enable_motor_torque(ser, motor_id)
-        
-        # Determine which motors to move
-        if TEST_MOTOR_ONLY is not None:
-            if isinstance(TEST_MOTOR_ONLY, list):
-                motors_to_move = TEST_MOTOR_ONLY
-                logger.info(f"\n⚠️  TEST MODE: Only moving Motors {motors_to_move}")
-            else:
-                motors_to_move = [TEST_MOTOR_ONLY]
-                logger.info(f"\n⚠️  TEST MODE: Only moving Motor {TEST_MOTOR_ONLY}")
-        else:
-            motors_to_move = MOTOR_IDS
-            logger.info(f"\n⚠️  Moving ALL motors")
-        
-        # logger.info("Starting trajectory in 3 seconds...")
-        time.sleep(0.1)
-        
-        # Execute trajectory: Home -> Home-100 -> Home+100 -> Home
-        waypoints = [-POSITION_RANGE, POSITION_RANGE, 0]
-        
-        for waypoint_idx, target_offset in enumerate(waypoints):
-            waypoint_name = ["MIN", "MAX", "HOME"][waypoint_idx]
-            logger.info(f"\n=== Moving to waypoint: {waypoint_name} (offset: {target_offset:+d}) ===")
-            
-            # Calculate target positions for motors to move
-            targets = {
-                motor_id: HOME_POSITIONS[motor_id] + target_offset
-                for motor_id in motors_to_move
-            }
-            
-            # Move incrementally until all motors reach target (PARALLEL)
-            step_count = 0
-            while True:
-                timestamp = time.time()
-                step_count += 1
-                
-                # First, read ALL motor positions
-                current_positions_dict = {}
-                for motor_id in motors_to_move:
-                    current = get_motor_position(ser, motor_id)
-                    if current is not None:
-                        current_positions_dict[motor_id] = current
-                
-                # Log step info
-                debug_this_step = (step_count <= 3) or (step_count % 20 == 0)
-                if debug_this_step:
-                    logger.info(f"\n=== Step {step_count} ===")
-                
-                # Then, send position commands to ALL motors (parallel)
-                all_reached = True
-                for motor_id in motors_to_move:
-                    if motor_id not in current_positions_dict:
-                        logger.warning(f"Step {step_count}: Failed to read Motor {motor_id}")
-                        continue
-                    
-                    current = current_positions_dict[motor_id]
-                    target = targets[motor_id]
-                    error = target - current
-                    
-                    if debug_this_step:
-                        logger.info(f"Motor {motor_id}: Current={current}, Target={target}, Error={error}")
-                    
-                    # Check if motor has reached target (within tolerance)
-                    if abs(error) <= STEP_SIZE:
-                        set_motor_position(ser, motor_id, target)
-                    else:
-                        # Move one step toward target
-                        if error > 0:
-                            next_pos = current + STEP_SIZE
-                        else:
-                            next_pos = current - STEP_SIZE
-                        
-                        set_motor_position(ser, motor_id, next_pos)
-                        all_reached = False
-                    
-                    # Stream current position for visualization
-                    connect_client.stream(
-                        "motor_trajectory",
-                        timestamp,
-                        names=[f"motor_{motor_id}"],
-                        values=[current]
-                    )
-                
-                # Check if all motors reached waypoint
-                if all_reached:
-                    logger.info(f"Waypoint {waypoint_name} reached!")
-                    time.sleep(0.5)  # Brief pause at waypoint
-                    break
-                
-                time.sleep(1.0 / UPDATE_RATE)
-        
-        logger.info("\n=== Trajectory complete! ===")
+        # TODO: Add your new control logic here
+        logger.info("Ready for new functionality!")
         
     except serial.SerialException as e:
         logger.error(f"Failed to open serial port {SERIAL_PORT}: {e}")
         
     except KeyboardInterrupt:
-        logger.info("Trajectory stopped by user.")
+        logger.info("Script stopped by user.")
         
     except Exception as e:
         logger.error(f"Unexpected error: {e}")

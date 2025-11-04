@@ -44,7 +44,33 @@ right_panel:
       y_range: [0, 4096]
       height: 250
     - display: header
-      label: "Arm 2 Current Motor Values"
+      label: "Arm 1 Current Motor Values (ACM1)"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_1
+      label: "Motor 1"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_2
+      label: "Motor 2"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_3
+      label: "Motor 3"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_4
+      label: "Motor 4"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_5
+      label: "Motor 5"
+    - display: stream_value
+      stream_id: so101_motors
+      channel: motor_6
+      label: "Motor 6"
+    - display: header
+      label: "Arm 2 Current Motor Values (ACM0)"
     - display: stream_value
       stream_id: so101_arm2_motors
       channel: motor_1
@@ -80,5 +106,11 @@ bottom_panel:
           path: so101_arm2.py
         - label: Camera Feeds
           path: so101_cameras.py
+        - label: "🎯 Find Home Positions"
+          path: so101_find_home.py
+        - label: "🏠 Go to Home (Quick)"
+          path: so101_go_home.py
+        - label: "🤖 Teleoperation (ACM1→ACM0)"
+          path: so101_teleoperation.py
         - label: "⚠️ Trajectory Test (ACM0)"
           path: so101_trajectory_test.py
