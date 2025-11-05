@@ -1,67 +1,76 @@
 <?xml version="1.0"?>
 <robot name="ur5e">
-  
-  <!-- Base link -->
+
+  <!-- ===== Base frames ===== -->
   <link name="base_link"/>
-  
+
   <link name="base">
     <visual>
       <geometry>
         <mesh filename="meshes/ur5e/visual/base.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/base.stl"/>
+      </geometry>
+    </collision>
   </link>
-  
+
   <joint name="base_link-base_fixed_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="base_link"/>
     <child link="base"/>
   </joint>
 
-  <!-- shoulder pan joint -->
-  <joint name="shoulder_pan_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.1625"/>
-    <parent link="base"/>
-    <child link="shoulder_link"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="150.0" lower="-6.2832" upper="6.2832" velocity="3.14"/>
-  </joint>
-
+  <!-- ===== J1 shoulder_pan ===== -->
   <link name="shoulder_link">
     <visual>
       <geometry>
         <mesh filename="meshes/ur5e/visual/shoulder.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/shoulder.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- shoulder lift joint -->
-  <joint name="shoulder_lift_joint" type="revolute">
-    <origin rpy="0 1.57079632679 0" xyz="0 0.13850 0"/>
-    <parent link="shoulder_link"/>
-    <child link="upper_arm_link"/>
-    <axis xyz="0 1 0"/>
-    <limit effort="150.0" lower="-6.2832" upper="6.2832" velocity="3.14"/>
+  <joint name="shoulder_pan_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.163"/>
+    <parent link="base"/>
+    <child link="shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="150.0" lower="-6.28318530718" upper="6.28318530718" velocity="3.15"/>
   </joint>
 
+  <!-- ===== J2 shoulder_lift ===== -->
   <link name="upper_arm_link">
     <visual>
+      <!-- mesh is modeled with X as link axis; rotate to match URDF Y-up convention for pitch joints -->
       <origin rpy="0 1.57079632679 0" xyz="0 0 0.2125"/>
       <geometry>
         <mesh filename="meshes/ur5e/visual/upperarm.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0 1.57079632679 0" xyz="0 0 0.2125"/>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/upperarm.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- elbow joint -->
-  <joint name="elbow_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0 -0.1197 0.425"/>
-    <parent link="upper_arm_link"/>
-    <child link="forearm_link"/>
+  <joint name="shoulder_lift_joint" type="revolute">
+    <origin rpy="0 1.57079632679 0" xyz="0 0.138 0"/>
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
     <axis xyz="0 1 0"/>
-    <limit effort="150.0" lower="-3.14159265359" upper="3.14159265359" velocity="3.14"/>
+    <limit effort="150.0" lower="-6.28318530718" upper="6.28318530718" velocity="3.15"/>
   </joint>
 
+  <!-- ===== J3 elbow ===== -->
   <link name="forearm_link">
     <visual>
       <origin rpy="0 1.57079632679 0" xyz="0 0 0.19615"/>
@@ -69,17 +78,23 @@
         <mesh filename="meshes/ur5e/visual/forearm.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0 1.57079632679 0" xyz="0 0 0.19615"/>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/forearm.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- wrist 1 joint -->
-  <joint name="wrist_1_joint" type="revolute">
-    <origin rpy="0 1.57079632679 0" xyz="0 0 0.3923"/>
-    <parent link="forearm_link"/>
-    <child link="wrist_1_link"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="28.0" lower="-6.2832" upper="6.2832" velocity="6.28"/>
+  <joint name="elbow_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 -0.131 0.425"/>
+    <parent link="upper_arm_link"/>
+    <child link="forearm_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="150.0" lower="-3.14159265359" upper="3.14159265359" velocity="3.15"/>
   </joint>
 
+  <!-- ===== J4 wrist_1 ===== -->
   <link name="wrist_1_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0.09465 0"/>
@@ -87,17 +102,23 @@
         <mesh filename="meshes/ur5e/visual/wrist1.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0.09465 0"/>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/wrist1.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- wrist 2 joint -->
-  <joint name="wrist_2_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0.09465 0"/>
-    <parent link="wrist_1_link"/>
-    <child link="wrist_2_link"/>
-    <axis xyz="0 0 1"/>
-    <limit effort="28.0" lower="-6.2832" upper="6.2832" velocity="6.28"/>
+  <joint name="wrist_1_joint" type="revolute">
+    <origin rpy="0 1.57079632679 0" xyz="0 0 0.392"/>
+    <parent link="forearm_link"/>
+    <child link="wrist_1_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="28.0" lower="-6.28318530718" upper="6.28318530718" velocity="3.2"/>
   </joint>
 
+  <!-- ===== J5 wrist_2 ===== -->
   <link name="wrist_2_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.09465"/>
@@ -105,17 +126,23 @@
         <mesh filename="meshes/ur5e/visual/wrist2.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.09465"/>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/wrist2.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- wrist 3 joint -->
-  <joint name="wrist_3_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0 0 0.09465"/>
-    <parent link="wrist_2_link"/>
-    <child link="wrist_3_link"/>
+  <joint name="wrist_2_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.127 0"/>
+    <parent link="wrist_1_link"/>
+    <child link="wrist_2_link"/>
     <axis xyz="0 0 1"/>
-    <limit effort="28.0" lower="-6.2832" upper="6.2832" velocity="6.28"/>
+    <limit effort="28.0" lower="-6.28318530718" upper="6.28318530718" velocity="3.2"/>
   </joint>
 
+  <!-- ===== J6 wrist_3 ===== -->
   <link name="wrist_3_link">
     <visual>
       <origin rpy="0 1.57079632679 0" xyz="0 0.0823 0"/>
@@ -123,15 +150,29 @@
         <mesh filename="meshes/ur5e/visual/wrist3.dae"/>
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0 1.57079632679 0" xyz="0 0.0823 0"/>
+      <geometry>
+        <mesh filename="meshes/ur5e/collision/wrist3.stl"/>
+      </geometry>
+    </collision>
   </link>
 
-  <!-- Tool link -->
+  <joint name="wrist_3_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.100"/>
+    <parent link="wrist_2_link"/>
+    <child link="wrist_3_link"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="28.0" lower="-6.28318530718" upper="6.28318530718" velocity="3.2"/>
+  </joint>
+
+  <!-- ===== Tool flange ===== -->
   <link name="tool0"/>
 
   <joint name="wrist_3-tool0" type="fixed">
+    <origin rpy="-1.57079632679 0 0" xyz="0 0.0823 0"/>
     <parent link="wrist_3_link"/>
     <child link="tool0"/>
-    <origin rpy="-1.57079632679 0 0" xyz="0 0.0823 0"/>
   </joint>
 
 </robot>

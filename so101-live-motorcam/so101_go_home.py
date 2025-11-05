@@ -84,7 +84,7 @@ def read_motor_register(ser, motor_id, register_address, num_bytes=2):
     
     if len(response) >= (5 + num_bytes) and response[0] == 0xFF and response[1] == 0xFF:
         if num_bytes == 2:
-            return response[5] | (response[6] << 8)
+            return response[5] | (response[6] << 8)     # r5 + r6*(2^8=256)
         else:
             return response[5]
     return None

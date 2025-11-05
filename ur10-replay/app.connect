@@ -11,7 +11,7 @@ scene:
   camera:
     initial_zoom: 1
   models:
-    - path: urdf/ur5e/ur5e.urdf
+    - path: urdf/ur5e/ur5e_fixed.urdf
       initial_position:
         type: cartesian
         y: -1

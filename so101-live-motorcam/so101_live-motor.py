@@ -139,7 +139,7 @@ def main(connect_client: connect_python.Client):
                 connect_client.stream(
                     "so101_motors", 
                     timestamp, 
-                    names=channel_names, 
+                    names=channel_names,
                     values=channel_values
                 )
             else:
