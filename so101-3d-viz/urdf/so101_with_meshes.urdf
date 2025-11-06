@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<!-- SO-101 6-DOF Robot Arm URDF (mesh origins zeroed) -->
+<robot name="so101">
+
+  <!-- Materials -->
+  <material name="3d_printed"><color rgba="1.0 0.82 0.12 1.0"/></material>
+  <material name="sts3215"><color rgba="0.1 0.1 0.1 1.0"/></material>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/base_motor_holder_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/base_motor_holder_so101_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/base_so101_v2.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/base_so101_v2.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 1 -->
+  <joint name="shoulder_pan_joint" type="revolute">
+    <origin xyz="0.0388353 0 0.0624" rpy="3.14159 0 -3.14159"/>
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.91986" upper="1.91986"/>
+  </joint>
+
+  <!-- Shoulder Link -->
+  <link name="shoulder_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/motor_holder_so101_base_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/motor_holder_so101_base_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/rotation_pitch_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/rotation_pitch_so101_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 2 -->
+  <joint name="shoulder_lift_joint" type="revolute">
+    <origin xyz="-0.0303992 -0.0182778 -0.0542" rpy="-1.5708 -1.5708 0"/>
+    <parent link="shoulder_link"/>
+    <child link="upper_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.74533" upper="1.74533"/>
+  </joint>
+
+  <!-- Upper Arm Link -->
+  <link name="upper_arm_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/upper_arm_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/upper_arm_so101_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 3 -->
+  <joint name="elbow_joint" type="revolute">
+    <origin xyz="-0.11257 -0.028 0" rpy="0 0 1.5708"/>
+    <parent link="upper_arm_link"/>
+    <child link="lower_arm_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.69" upper="1.69"/>
+  </joint>
+
+  <!-- Lower Arm Link -->
+  <link name="lower_arm_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/under_arm_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/under_arm_so101_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/motor_holder_so101_wrist_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/motor_holder_so101_wrist_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 4 -->
+  <joint name="wrist_1_joint" type="revolute">
+    <origin xyz="-0.1349 0.0052 0" rpy="0 0 -1.5708"/>
+    <parent link="lower_arm_link"/>
+    <child link="wrist_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-1.65806" upper="1.65806"/>
+  </joint>
+
+  <!-- Wrist Link -->
+  <link name="wrist_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_no_horn_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_no_horn_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/wrist_roll_pitch_so101_v2.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/wrist_roll_pitch_so101_v2.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 5 -->
+  <joint name="wrist_2_joint" type="revolute">
+    <origin xyz="0 -0.0611 0.0181" rpy="1.5708 0.0486795 3.14159"/>
+    <parent link="wrist_link"/>
+    <child link="gripper_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-2.74385" upper="2.84121"/>
+  </joint>
+
+  <!-- Gripper Link -->
+  <link name="gripper_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/sts3215_03a_v1.stl"/></geometry>
+      <material name="sts3215"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/sts3215_03a_v1.stl"/></geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/wrist_roll_follower_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/wrist_roll_follower_so101_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 6 -->
+  <joint name="wrist_3_joint" type="revolute">
+    <origin xyz="0.0202 0.0188 -0.0234" rpy="1.5708 0 0"/>
+    <parent link="gripper_link"/>
+    <child link="moving_jaw_link"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10" velocity="10" lower="-0.174533" upper="1.74533"/>
+  </joint>
+
+  <!-- Moving Jaw Link -->
+  <link name="moving_jaw_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/visual/moving_jaw_so101_v1.stl"/></geometry>
+      <material name="3d_printed"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><mesh filename="meshes/collision/moving_jaw_so101_v1.stl"/></geometry>
+    </collision>
+  </link>
+
+  <!-- Tool link -->
+  <link name="tool0"/>
+  <joint name="tool0_joint" type="fixed">
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <parent link="moving_jaw_link"/>
+    <child link="tool0"/>
+  </joint>
+
+</robot>

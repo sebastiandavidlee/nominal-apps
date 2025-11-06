@@ -11,14 +11,20 @@ scene:
   camera:
     initial_zoom: 1
   models:
-    - path: urdf/ur5e/ur5e_fixed.urdf
+    - path: urdf/ur5/ur5.urdf
       initial_position:
         type: cartesian
         y: -1
       stream:
         id: pose
         channel_mapping:
-          urdf_links: "*" # maps each channel in the stream to a URDF link of the same name
+          urdf_links:
+            shoulder_link: shoulder_pan_joint
+            upper_arm_link: shoulder_lift_joint
+            forearm_link: elbow_joint
+            wrist_1_link: wrist_1_joint
+            wrist_2_link: wrist_2_joint
+            wrist_3_link: wrist_3_joint
 
 bottom_panel:
   layout:

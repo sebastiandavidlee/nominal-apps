@@ -1,0 +1,160 @@
+<?xml version="1.0"?>
+<!-- SO-101 6-DOF Robot Arm URDF -->
+<robot name="so101">
+  
+  <!-- Base link -->
+  <link name="base_link"/>
+  
+  <link name="base">
+    <visual>
+      <geometry>
+        <cylinder length="0.05" radius="0.04"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0.2 0.2 0.2 1.0"/>
+      </material>
+    </visual>
+  </link>
+  
+  <joint name="base_link-base_fixed_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="base"/>
+  </joint>
+
+  <!-- Joint 1: Base rotation (shoulder pan) -->
+  <joint name="shoulder_pan_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
+    <parent link="base"/>
+    <child link="link_1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_1">
+    <visual>
+      <origin xyz="0 0 0.04" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.035"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.2 0.4 0.8 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Joint 2: Shoulder lift -->
+  <joint name="shoulder_lift_joint" type="revolute">
+    <origin rpy="0 1.57079632679 0" xyz="0 0 0.08"/>
+    <parent link="link_1"/>
+    <child link="link_2"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_2">
+    <visual>
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.03"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.2 0.4 0.8 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Joint 3: Elbow -->
+  <joint name="elbow_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.15"/>
+    <parent link="link_2"/>
+    <child link="link_3"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_3">
+    <visual>
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.025"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0.2 0.4 0.8 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Joint 4: Wrist 1 -->
+  <joint name="wrist_1_joint" type="revolute">
+    <origin rpy="0 1.57079632679 0" xyz="0 0 0.15"/>
+    <parent link="link_3"/>
+    <child link="link_4"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="5.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_4">
+    <visual>
+      <origin xyz="0 0.03 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.06" radius="0.02"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.6 0.6 0.6 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Joint 5: Wrist 2 -->
+  <joint name="wrist_2_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0.06 0"/>
+    <parent link="link_4"/>
+    <child link="link_5"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="5.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_5">
+    <visual>
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.05" radius="0.018"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.6 0.6 0.6 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Joint 6: Wrist 3 (end effector rotation) -->
+  <joint name="wrist_3_joint" type="revolute">
+    <origin rpy="0 0 0" xyz="0 0 0.05"/>
+    <parent link="link_5"/>
+    <child link="link_6"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="5.0" lower="-3.14" upper="3.14" velocity="2.0"/>
+  </joint>
+
+  <link name="link_6">
+    <visual>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.015"/>
+      </geometry>
+      <material name="gray">
+        <color rgba="0.6 0.6 0.6 1.0"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- Tool/end effector link -->
+  <link name="tool0"/>
+
+  <joint name="tool0_joint" type="fixed">
+    <parent link="link_6"/>
+    <child link="tool0"/>
+    <origin rpy="0 0 0" xyz="0 0 0.04"/>
+  </joint>
+
+</robot>

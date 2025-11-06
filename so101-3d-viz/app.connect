@@ -1,0 +1,67 @@
+title: SO-101 Robot 3D Visualization
+
+python:
+  packages:
+    - pyserial
+    - connect-python
+
+streaming:
+  buffer_size: 10_000
+
+scene:
+  camera:
+    initial_zoom: 2
+  models:
+    - path: urdf/so101_with_meshes_fixed.urdf
+      initial_position:
+        type: cartesian
+        y: -0.5
+      stream:
+        id: pose
+        channel_mapping:
+          urdf_links: "*"
+
+right_panel:
+  width: 0.3
+  layout:
+    - title: Motor Positions (Encoder)
+      plot: line
+      stream_id: motor_positions
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      x_label: Time (s)
+      y_label: Encoder Value
+      y_range: [0, 4095]
+      height: 300
+    - display: header
+      label: "Current Motor Positions (0-4095)"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_1
+      label: "Motor 1"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_2
+      label: "Motor 2"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_3
+      label: "Motor 3"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_4
+      label: "Motor 4"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_5
+      label: "Motor 5"
+    - display: stream_value
+      stream_id: motor_positions
+      channel: motor_6
+      label: "Motor 6"
+
+bottom_panel:
+  layout:
+    - controls: script_table
+      scripts:
+        - label: "🎥 SO-101 3D Visualization"
+          path: so101_visualize.py
