@@ -1,0 +1,157 @@
+title: SO-101 Robot Unified Control Center
+
+python:
+  packages:
+    - pyserial
+    - opencv-python
+    - connect-python
+
+streaming:
+  buffer_size: 10_000
+
+scene:
+  camera:
+    initial_zoom: 2
+  models:
+    - path: urdf/so101_follower.urdf
+      initial_position:
+        type: cartesian
+        y: -0.5
+      stream:
+        id: pose
+        channel_mapping:
+          urdf_links: "*"
+
+right_panel:
+  width: 0.35
+  layout:
+    # ========== MOTOR POSITION PLOTS ==========
+    - title: Leader Arm Motor Positions
+      plot: line
+      stream_id: leader_positions
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      x_label: Time (s)
+      y_label: Encoder Value
+      y_range: [0, 4095]
+      height: 250
+    
+    - title: Follower Arm Commands
+      plot: line
+      stream_id: follower_commands
+      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      x_label: Time (s)
+      y_label: Encoder Value
+      y_range: [0, 4095]
+      height: 250
+    
+    # ========== CURRENT VALUES ==========
+    - display: header
+      label: "Leader Arm Positions (0-4095)"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_1
+      label: "Motor 1"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_2
+      label: "Motor 2"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_3
+      label: "Motor 3"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_4
+      label: "Motor 4"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_5
+      label: "Motor 5"
+    
+    - display: stream_value
+      stream_id: leader_positions
+      channel: motor_6
+      label: "Motor 6"
+    
+    - display: header
+      label: "Follower Arm Commands (0-4095)"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_1
+      label: "Motor 1"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_2
+      label: "Motor 2"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_3
+      label: "Motor 3"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_4
+      label: "Motor 4"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_5
+      label: "Motor 5"
+    
+    - display: stream_value
+      stream_id: follower_commands
+      channel: motor_6
+      label: "Motor 6"
+
+bottom_panel:
+  layout:
+    # ========== CAMERA FEEDS ==========
+    - display: header
+      label: "📷 Camera Feeds"
+    
+    - display: rgb
+      stream_id: camera_1
+      label: "Camera 1"
+      height: 300
+    
+    - display: rgb
+      stream_id: camera_2
+      label: "Camera 2"
+      height: 300
+    
+    # ========== SCRIPT CONTROLS ==========
+    - controls: script_table
+      scripts:
+        # === Check Scripts ===
+        - label: "✅ Check: Arm 1 Reading"
+          path: check_arm1_reading.py
+          description: "Test reading positions from Arm 1 (ACM1)"
+        
+        - label: "✅ Check: Arm 2 Control"
+          path: check_arm2_control.py
+          description: "Test commanding Arm 2 (ACM0) with hardcoded positions"
+        
+        - label: "✅ Check: Cameras"
+          path: check_cameras.py
+          description: "Test dual camera feeds"
+        
+        - label: "✅ Check: 3D Visualization"
+          path: check_viz.py
+          description: "Test 3D URDF visualization of arm"
+        
+        # === Main Scripts ===
+        - label: "🤖 Teleoperation (Simple)"
+          path: teleoperation.py
+          description: "Leader-follower control with motor plots only"
+        
+        - label: "🎥 Teleoperation + Viz (Full)"
+          path: teleoperation_viz.py
+          description: "Complete teleoperation with 3D viz and cameras"
