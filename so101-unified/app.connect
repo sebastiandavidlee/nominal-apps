@@ -22,6 +22,23 @@ scene:
         channel_mapping:
           urdf_links: "*"
 
+left_panel:
+  width: 0.25
+  layout:
+    # ========== CAMERA FEEDS ==========
+    - display: header
+      label: "📷 Camera Feeds"
+    
+    - display: video
+      frames: camera_1
+      label: "Camera 1"
+      height: 300
+    
+    - display: video
+      frames: camera_2
+      label: "Camera 2"
+      height: 300
+
 right_panel:
   width: 0.35
   layout:
@@ -113,45 +130,25 @@ right_panel:
 
 bottom_panel:
   layout:
-    # ========== CAMERA FEEDS ==========
-    - display: header
-      label: "📷 Camera Feeds"
-    
-    - display: rgb
-      stream_id: camera_1
-      label: "Camera 1"
-      height: 300
-    
-    - display: rgb
-      stream_id: camera_2
-      label: "Camera 2"
-      height: 300
-    
     # ========== SCRIPT CONTROLS ==========
     - controls: script_table
       scripts:
         # === Check Scripts ===
         - label: "✅ Check: Arm 1 Reading"
           path: check_arm1_reading.py
-          description: "Test reading positions from Arm 1 (ACM1)"
         
         - label: "✅ Check: Arm 2 Control"
           path: check_arm2_control.py
-          description: "Test commanding Arm 2 (ACM0) with hardcoded positions"
         
         - label: "✅ Check: Cameras"
           path: check_cameras.py
-          description: "Test dual camera feeds"
         
         - label: "✅ Check: 3D Visualization"
           path: check_viz.py
-          description: "Test 3D URDF visualization of arm"
         
         # === Main Scripts ===
         - label: "🤖 Teleoperation (Simple)"
           path: teleoperation.py
-          description: "Leader-follower control with motor plots only"
         
         - label: "🎥 Teleoperation + Viz (Full)"
           path: teleoperation_viz.py
-          description: "Complete teleoperation with 3D viz and cameras"
