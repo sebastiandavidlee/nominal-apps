@@ -1,0 +1,88 @@
+title: Condensed layout
+
+python:
+  packages:
+    - numpy
+    - colorama
+
+left_panel:
+  width: 0.35
+  tabs:
+    - name: Content
+      layout:
+        - label: Runtime state
+          collapsible: true
+          default_open: true
+          size: 0.9
+          group_layout:
+            - label: teleop
+              on_click:
+                id: runtime
+                path: script.py
+            - display: logs
+              script_id: runtime
+        - label: Device status
+          collapsible: true
+          default_open: true
+          size: 0.5
+          group_layout:
+            - id: hexmove_mobile_base
+              input: text
+
+right_panel:
+  width: 0.65
+  tabs:
+    - name: Content
+      layout:
+        - label: step period
+          collapsible: true
+          default_open: true
+          group_layout:
+            - plot: line
+              stream_id: sine_wave
+              color: "#006400"
+              hide_grid: true
+              hide_axes: true
+              height: 60
+        - label: hexmove_mobile_base
+          collapsible: true
+          default_open: true
+          group_layout:
+            - collapsible: true
+              label: hexmove_mobile_base/vel/velocity
+              group_layout:
+                - id: velocity
+                  input: text
+            - plot: line
+              stream_id: cosine_wave
+              hide_grid: true
+              hide_axes: true
+              height: 60
+            - plot: line
+              stream_id: tangent_wave
+              hide_grid: true
+              hide_axes: true
+              height: 60
+        - label: hexmove_mobile_base_lift
+          collapsible: true
+          default_open: true
+          group_layout:
+            - label: hexmove_mobile_base_lift/pose/position
+              collapsible: true
+              group_layout:
+                - id: position
+                  input: text
+        - label: joystick
+          collapsible: true
+          default_open: true
+          group_layout:
+            - label: joystick/lift_velocity
+              collapsible: true
+              group_layout:
+                - id: lift_velocity
+                  input: text
+            - label: joystick/velocity
+              collapsible: true
+              group_layout:
+                - id: joystick_velocity
+                  input: text

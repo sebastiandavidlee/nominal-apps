@@ -27,37 +27,12 @@ right_panel:
     - title: Motor Positions (Encoder)
       plot: line
       stream_id: motor_positions
-      channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      # channels: ["motor_1", "motor_2", "motor_3", "motor_4", "motor_5", "motor_6"]
+      channels: ["motor_1"]
       x_label: Time (s)
       y_label: Encoder Value
       y_range: [0, 4095]
       height: 300
-    - display: header
-      label: "Current Motor Positions (0-4095)"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_1
-      label: "Motor 1"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_2
-      label: "Motor 2"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_3
-      label: "Motor 3"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_4
-      label: "Motor 4"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_5
-      label: "Motor 5"
-    - display: stream_value
-      stream_id: motor_positions
-      channel: motor_6
-      label: "Motor 6"
 
 bottom_panel:
   layout:
